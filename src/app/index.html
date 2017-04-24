@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!-- <html ng-app> -->
+<html ng-app="app">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angular SPA</title>
+
+<link rel="stylesheet" href="../app/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="../app/bower_components/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+
+<body ng-cloak>
+<nav>
+  <h1>List Cars</h1>
+</nav>
+<div class="main-container">
+  <div class="container">
+    <div class="row">
+
+      <section class="views {{ViewCarCTRL.bClass.type}}" ng-controller="ViewCarCTRL as ViewCarCTRL">
+        <div class="control-pane">
+          <div class="toggle-view">
+            <label>Views</label>
+            <button class="view {{ViewCarCTRL.bClass.listActive}}" ng-click="ViewCarCTRL.setViewList()">List</button>
+            <button class="view {{ViewCarCTRL.bClass.tileActive}}" ng-click="ViewCarCTRL.setViewTile()">Tile</button>
+          </div>
+          <div class="filters">
+            <div class="group">
+              <label for="sort">Sort by</label>
+              <select name="" id="sort" class="filter"
+              ng-model="ViewCarCTRL.sortedProperty"
+              ng-change="ViewCarCTRL.SortedBy()"
+              ng-options="x as y for (x, y) in ViewCarCTRL.properties">
+              </select>
+            </div>
+            <div class="group">
+              <label>Price</label>
+              <div class="double">
+                <label>min: </label>
+                <input type="number" ng-model="ViewCarCTRL.minPrice">
+                <input type="range" min="0" max="99999" ng-model="ViewCarCTRL.minPrice" >
+              </div>
+              <div class="double">
+                <label>max: </label>
+                <input type="number" ng-model="ViewCarCTRL.maxPrice">
+                <input type="range" min="0" max="50000" ng-model="ViewCarCTRL.maxPrice" >
+              </div>
+              <button type="button" name="button" ng-click="ViewCarCTRL.rangePrice()" class="btn btn-success">Ok</button>
+            </div>
+            <div class="group">
+              <label>Year</label>
+              <div class="double">
+                <label>min: </label>
+                <input type="number" ng-model="ViewCarCTRL.minYear" ng-change="ViewCarCTRL.rangeYear()">
+                <input type="range" min="1980" max="2017" ng-model="ViewCarCTRL.minYear" >
+              </div>
+              <div class="double">
+                <label>max: </label>
+                <input type="number" ng-model="ViewCarCTRL.maxYear">
+                <input type="range" min="1980" max="2017" ng-model="ViewCarCTRL.maxYear" >
+              </div>
+              <button type="button" name="button" ng-click="ViewCarCTRL.rangeYear()" class="btn btn-success">Ok</button>
+
+            </div>
+          </div>
+
+
+
+        </div>
+        <article class="element {{ViewCarCTRL.bClass.class}}" id="car-{{car.id}}" ng-repeat="car in ViewCarCTRL.carList | pagination: ViewCarCTRL.BeginFrom()  |limitTo: ViewCarCTRL.itemInPage">
+          <button type="button" name="remove" class="remove" ng-click="ViewCarCTRL.removeCar(car)">X</button>
+          <div class="block_image" style="background-image:url('../app/images/{{car.images}}')">
+
+          </div>
+          <div class="block_info">
+            <div class="title">
+              <div class="car_name">
+                {{car.name}}
+                <div class="price">
+                  $ {{car.price}}
+                  <span class="top"></span>
+                  <span class="default"></span>
+                </div>
+              </div>
+
+            </div>
+            <div class="specifications" >
+              <span>Year: {{car.year}}</span>
+              <div class="item {{sp.tile}}" ng-repeat="sp in car.specification">
+                <span class="title">{{sp.name}}</span>
+                <span>{{sp.val}}</span>
+              </div>
+            </div>
+            <div class="footer">
+              <div class="item">
+                <span class="description">loem ipsum</span>
+              </div>
+            </div>
+          </div>
+
+        </article>
+
+
+        <article class="car-form" >
+          <button type="button" name="button" class="btn btn-primary" ng-click="ViewCarCTRL.showForm()" ng-show="ViewCarCTRL.showButton">Add More Cars</button>
+          <div class="forms" ng-show="ViewCarCTRL.show">
+            <div class="group">
+              <label for="name">Name</label>
+              <input type="text" name="name" id="name" ng-model="ViewCarCTRL.newCar.name">
+            </div>
+
+            <div class="group">
+              <div class="double">
+                <label for="price">Price</label>
+                <input type="number" name="price" id="price" ng-model="ViewCarCTRL.newCar.price">
+              </div><div class="double">
+                <label for="image">Image</label>
+                <input type="file" name="image" id="image" fileread="ViewCarCTRL.newCar.images">
+              </div>
+
+            </div>
+            <div class="group">
+              <label for="year">Year</label>
+              <input type="number" min="1980" max="2017" name="name" id="year" ng-model="ViewCarCTRL.newCar.year">
+            </div>
+            <div class="specification_block" >
+
+              <div class="group">
+                <label for="sp_name">Specification name</label>
+                <input type="text" name="sp_name" id="sp_name" ng-model="ViewCarCTRL.specification.name">
+              </div>
+
+              <div class="group">
+                <label for="sp_val">Specification value</label>
+                <input type="text" name="sp_val" id="sp_val" ng-model="ViewCarCTRL.specification.val">
+              </div>
+
+              <div class="group">
+                <div class="double">
+                  <label for="sp_tile" class="check">Show in tile view? </label>
+                  <input type="checkbox" name="sp_tile" id="sp_tile" ng-model="ViewCarCTRL.specification.tile">
+                </div><div class="double">
+                  <label for="">Specification icon</label>
+                  <input type="file" name="sp_icon" id="sp_icon" fileread="ViewCarCTRL.specification.icon">
+                </div>
+              </div>
+            </div>
+
+            <div class="button-group">
+              <button type="button" name="button" class="btn btn-success" ng-click="ViewCarCTRL.addCar()">Add</button>
+              <button type="button" name="button" class="btn btn-danger" ng-click="ViewCarCTRL.showForm()">Cancel</button>
+            </div>
+          </div>
+
+        </article>
+        <article class="centred">
+          <ul ng-if="ViewCarCTRL.totalPages" class="pagination">
+              <li ng-class="{disabled:ViewCarCTRL.currentPage === 0}">
+                  <a ng-click="ViewCarCTRL.firstPage()">First</a>
+              </li>
+              <li ng-class="{disabled:ViewCarCTRL.currentPage === 0}">
+                  <a ng-click="ViewCarCTRL.prevPage()">Previous</a>
+              </li>
+              <li ng-repeat="page in ViewCarCTRL.pages()" ng-class="{active:ViewCarCTRL.currentPage === page}">
+                  <a ng-click="ViewCarCTRL.goToPage(page)">{{page+1}}</a>
+              </li>
+              <li ng-class="{disabled:ViewCarCTRL.currentPage === ViewCarCTRL.totalPages()}">
+                  <a ng-click="ViewCarCTRL.nextPage()">Next</a>
+              </li>
+              <li ng-class="{disabled:ViewCarCTRL.currentPage === ViewCarCTRL.totalPages()}">
+                  <a ng-click="ViewCarCTRL.setPage(ViewCarCTRL.lastPage())">Last</a>
+              </li>
+          </ul>
+        </article>
+
+      </section>
+      .
+  </div>
+  </div>
+</div>
+  <!-- build:js scripts/app.js -->
+  <script src="bower_components/angular/angular.js" charset="utf-8"></script>
+  <script src="bower_components/lodash/dist/lodash.min.js" charset="utf-8"></script>
+  <!-- <script src="bower_components/bootstrap-ui/src/pagination/index.js" charset="utf-8"></script> -->
+
+
+  <script src="scripts/app.js" charset="utf-8"></script>
+  <script src="scripts/filters/pagination.js" charset="utf-8"></script>
+  <script src="scripts/directives/fileLoad.js" charset="utf-8"></script>
+  <script src="scripts/controllers/myCtrl.js" charset="utf-8"></script>
+  <script src="scripts/factories/CarFactory.js" charset="utf-8"></script>
+
+  <!-- endbuild -->
+  </body>
+</html>

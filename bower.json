@@ -1,0 +1,25 @@
+{
+  "name": "base_angular",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Dihtiar Artem <temich1608@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/temich1608/base_angular",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "bootstrap-ui": "^2.5.0",
+    "angular": "^1.6.4",
+    "font-awesome": "^4.7.0",
+    "lodash": "^4.17.4"
+  }
+}
